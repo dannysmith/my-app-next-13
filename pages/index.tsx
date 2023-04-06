@@ -1,10 +1,22 @@
-import Head from 'next/head'
-import styles from '@/styles/Home.module.css'
+import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
+import styles from '@/styles/Home.module.css';
 import prisma from '../lib/prisma';
-import PostCard from '../components/PostCard'
+import PostCard from '../components/PostCard';
 
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  published: boolean;
+  createdAt: string;
+}
 
-export default function Home({ posts }) {
+interface Props {
+  posts: Post[];
+}
+
+const Home: NextPage<Props> = ({ posts }) => {
   return (
     <>
       <Head>
@@ -14,22 +26,22 @@ export default function Home({ posts }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-          <h1>
-            Hello World. This is the main place, yo.
-          </h1>
-          <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-items-center  gap-4">
-          {posts.map((post:any) => (
-            <PostCard post={post} key ={post.id}/>
+        <h1>Hello World. This is the main place, yo.</h1>
+        <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-items-center  gap-4">
+          {posts.map((post) => (
+            <PostCard post={post} key={post.id} />
           ))}
         </div>
       </main>
     </>
-  )
-}
+  );
+};
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const posts = await prisma.post.findMany();
   return {
     props: { posts },
   };
-}
+};
+
+export default Home;
