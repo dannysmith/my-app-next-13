@@ -2,10 +2,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '../../lib/prisma';
 
-// type Data = {
-//   name: string
-// }
+type Data = {
+  data: string
+}
 
+// Not currentlyusing this, but calling getData() should return stuff from the DB
 export const getData = async () => {
   return await prisma.post.findMany({
     where: { published: true }
@@ -16,5 +17,5 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({data: getData()})
+  res.status(200).json({data: "bob"})
   }
