@@ -13,7 +13,7 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
           <h1>
-            Hello World
+            Hello World. This is the main place, yo.
           </h1>
           <SignUp path="/sign-up" routing="path" signInUrl="/sign-in" />
       </main>
