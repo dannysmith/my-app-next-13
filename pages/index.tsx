@@ -18,7 +18,7 @@ export default function Home({ posts }) {
             Hello World. This is the main place, yo.
           </h1>
           <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-items-center  gap-4">
-          {posts.map((post) => (
+          {posts.map((post:any) => (
             <PostCard post={post} key ={post.id}/>
           ))}
         </div>
@@ -27,7 +27,7 @@ export default function Home({ posts }) {
   )
 }
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
   const posts = await prisma.post.findMany();
   return {
     props: { posts },
