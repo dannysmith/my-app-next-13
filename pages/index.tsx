@@ -1,8 +1,22 @@
-import Head from 'next/head'
-import styles from '@/styles/Home.module.css'
-import { SignUp } from "@clerk/nextjs";
+import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
+import styles from '@/styles/Home.module.css';
+import prisma from '../lib/prisma';
+import PostCard from '../components/PostCard';
 
-export default function Home() {
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  published: boolean;
+  createdAt: string;
+}
+
+interface Props {
+  posts: Post[];
+}
+
+const Home: NextPage<Props> = ({ posts }) => {
   return (
     <>
       <Head>
@@ -12,11 +26,22 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-          <h1>
-            Hello World
-          </h1>
-          <SignUp path="/sign-up" routing="path" signInUrl="/sign-in" />
+        <h1>Hello World. This is the main place, yo.</h1>
+        <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-items-center  gap-4">
+          {posts.map((post) => (
+            <PostCard post={post} key={post.id} />
+          ))}
+        </div>
       </main>
     </>
-  )
-}
+  );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const posts = await prisma.post.findMany();
+  return {
+    props: { posts },
+  };
+};
+
+export default Home;
