@@ -1,8 +1,10 @@
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
-import { SignUp } from "@clerk/nextjs";
+import prisma from '../lib/prisma';
+import PostCard from '../components/PostCard'
 
-export default function Home() {
+
+export default function Home({ posts }) {
   return (
     <>
       <Head>
@@ -15,8 +17,19 @@ export default function Home() {
           <h1>
             Hello World. This is the main place, yo.
           </h1>
-          <SignUp path="/sign-up" routing="path" signInUrl="/sign-in" />
+          <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-items-center  gap-4">
+          {posts.map((post) => (
+            <PostCard post={post} key ={post.id}/>
+          ))}
+        </div>
       </main>
     </>
   )
+}
+
+export async function getStaticProps(context) {
+  const posts = await prisma.post.findMany();
+  return {
+    props: { posts },
+  };
 }
